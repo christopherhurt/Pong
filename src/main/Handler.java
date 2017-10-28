@@ -36,4 +36,14 @@ public class Handler {
 		}
 	}
 	
+	public boolean checkCollision(GameObject collider1, ID collider2){
+	    for(GameObject obj : list){
+            if(collider2 == obj.getId() && collider1.getBounds().intersects(obj.getBounds())){
+                return true;
+            }
+	    }
+	    
+	    return false;
+	}
+	
 }
