@@ -4,9 +4,7 @@ import java.awt.Graphics2D;
 
 public class Controller {
 	
-	private static final State INIT_STATE = State.MAIN_MENU;
-	
-	private static State state = INIT_STATE;
+	private static State state = Game.INIT_STATE;
 	
 	private static Menu mainMenu = null;
 	private static Menu playMenu = null;
@@ -20,11 +18,8 @@ public class Controller {
 		aboutMenu = new AboutMenu();
 		
 		splitScreenHandler = new Handler();
-	}
-	
-	public static void initSplitScreen(){
-		splitScreenHandler.clear();
-		// TODO
+		
+		SplitScreen.init();
 	}
 	
 	public static void update(){
@@ -37,6 +32,9 @@ public class Controller {
 				break;
 			case ABOUT_MENU:
 				aboutMenu.update();
+				break;
+			case SPLIT_SCREEN:
+				SplitScreen.update();
 				break;
 			default:
 				System.err.println("Invalid game state.");
@@ -55,6 +53,9 @@ public class Controller {
 			case ABOUT_MENU:
 				aboutMenu.render(g);
 				break;
+			case SPLIT_SCREEN:
+				SplitScreen.render(g);
+				break;
 			default:
 				System.err.println("Invalid game state.");
 				System.exit(-1);
@@ -63,6 +64,10 @@ public class Controller {
 	
 	public static void setState(State state){
 		Controller.state = state;
+	}
+	
+	public static Handler getSplitScreenHandler(){
+		return splitScreenHandler;
 	}
 	
 }

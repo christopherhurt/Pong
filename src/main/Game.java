@@ -17,9 +17,13 @@ public class Game {
 	
 	public static final int WIDTH = 400, HEIGHT = 400;
 	public static final String TITLE = "Pong";
+	public static final int FPS = 60;
 	public static final Color GAME_COLOR = Color.WHITE;
 	public static final Color BACKGROUND_COLOR = Color.BLACK;
 	public static final Font MENU_FONT = new Font("arial", Font.PLAIN, 72);
+	public static final State INIT_STATE = State.SPLIT_SCREEN;
+	
+	private static final double TIME_BETWEEN_RENDERS = 1.0 / FPS;
 	
 	private static Canvas canvas = null;
 	
@@ -71,8 +75,6 @@ public class Game {
 				long lastTime;
 				long currTime = System.nanoTime();
 				double delta = 0;
-				final int FPS_CAP = 60;
-				final double TIME_BETWEEN_RENDERS = 1.0 / FPS_CAP;
 				
 				while(true){
 					lastTime = currTime;
@@ -104,6 +106,7 @@ public class Game {
 		canvas.setPreferredSize(canvasSize);
 		
 		frame.add(canvas);
+		frame.pack();
 		frame.setVisible(true);
 		
 		return frame;

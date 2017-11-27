@@ -4,13 +4,13 @@ import java.awt.Graphics2D;
 
 public class Paddle extends GameObject implements Collider, InputResponder {
 	
-	private static final float SPEED = 5.0f;
+	private static final int SPEED = 5;
 	
 	private final int MIN_Y, MAX_Y;
 	private final int UP_KEY, DOWN_KEY;
 	
-	public Paddle(int x, int y, final int w, final int h, float vX, float vY, final ID id) {
-		super(x, y, w, h, vX, vY, id);
+	public Paddle(int x, int y, final int w, final int h, int vX, int vY, final ID id, Handler handler) {
+		super(x, y, w, h, vX, vY, id, handler);
 		
 		if(id != ID.P1_PADDLE && id != ID.P2_PADDLE){
 			System.err.println("Invalid paddle ID.");
@@ -58,7 +58,7 @@ public class Paddle extends GameObject implements Collider, InputResponder {
 	
 	@Override
 	public void render(Graphics2D g){
-		g.drawRect(x, y, w, h);
+		g.fillRect(x, y, w, h);
 	}
 	
 }

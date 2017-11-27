@@ -36,14 +36,17 @@ public class Handler {
 		}
 	}
 	
-	public boolean checkCollision(GameObject collider1, ID collider2){
-	    for(GameObject obj : list){
-            if(collider2 == obj.getId() && collider1.getBounds().intersects(obj.getBounds())){
-                return true;
-            }
-	    }
-	    
-	    return false;
+	public GameObject getGameObject(ID id){
+		for(GameObject obj : list){
+			if(id == obj.getID()){
+				return obj;
+			}
+		}
+		return null;
+	}
+	
+	public boolean checkCollision(GameObject collider1, GameObject collider2){
+		return collider1.getBounds().intersects(collider2.getBounds());
 	}
 	
 }

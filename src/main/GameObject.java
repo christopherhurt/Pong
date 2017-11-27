@@ -7,10 +7,11 @@ public abstract class GameObject {
 	
 	protected int x, y;
 	protected final int w, h;
-	protected float vX, vY;
+	protected int vX, vY;
 	protected final ID id;
+	protected final Handler handler;
 	
-	public GameObject(int x, int y, final int w, final int h, float vX, float vY, final ID id){
+	public GameObject(int x, int y, final int w, final int h, int vX, int vY, final ID id, final Handler handler){
 		this.x = x;
 		this.y = y;
 		this.w = w;
@@ -18,6 +19,8 @@ public abstract class GameObject {
 		this.vX = vX;
 		this.vY = vY;
 		this.id = id;
+		this.handler = handler;
+		handler.add(this);
 	}
 	
 	public void update(){
@@ -43,23 +46,23 @@ public abstract class GameObject {
 		return h;
 	}
 
-	public float getvX() {
+	public int getvX() {
 		return vX;
 	}
 
-	public void setvX(float vX) {
+	public void setvX(int vX) {
 		this.vX = vX;
 	}
 
-	public float getvY() {
+	public int getvY() {
 		return vY;
 	}
 
-	public void setvY(float vY) {
+	public void setvY(int vY) {
 		this.vY = vY;
 	}
 
-	public ID getId() {
+	public ID getID() {
 		return id;
 	}
 	
