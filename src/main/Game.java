@@ -10,6 +10,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferStrategy;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
@@ -17,11 +18,12 @@ public class Game {
 	
 	public static final int WIDTH = 400, HEIGHT = 400;
 	public static final String TITLE = "Pong";
+	public static final String WINDOW_ICON_FILE = "res/icon.png";
 	public static final int FPS = 60;
 	public static final Color GAME_COLOR = Color.WHITE;
 	public static final Color BACKGROUND_COLOR = Color.BLACK;
-	public static final Font MENU_FONT = new Font("arial", Font.PLAIN, 72);
-	public static final State INIT_STATE = State.SPLIT_SCREEN;
+	public static final Font MENU_FONT = new Font("arial", Font.PLAIN, 54);
+	public static final State INIT_STATE = State.MAIN_MENU;
 	
 	private static final double TIME_BETWEEN_RENDERS = 1.0 / FPS;
 	
@@ -94,6 +96,7 @@ public class Game {
 	
 	private static JFrame createWindow(Canvas canvas){
 		JFrame frame = new JFrame(TITLE);
+		frame.setIconImage((new ImageIcon(WINDOW_ICON_FILE)).getImage());
 		
 		frame.setSize(WIDTH, HEIGHT);
 		frame.setResizable(false);

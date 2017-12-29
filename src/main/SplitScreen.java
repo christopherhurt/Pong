@@ -2,6 +2,8 @@ package main;
 
 import java.awt.Graphics2D;
 
+import javax.swing.JOptionPane;
+
 public class SplitScreen {
 	
 	private static final int PAUSE_TIME_IN_SECONDS = 3 * Game.FPS;
@@ -15,6 +17,7 @@ public class SplitScreen {
 	public static final int BALL_SIZE = 25;
 	private static final int BALL_INIT_X = (Game.WIDTH - BALL_SIZE) / 2;
 	private static final int BALL_INIT_Y = (Game.HEIGHT - BALL_SIZE) / 2;
+	private static final int INIT_X_VEL = 3;
 	private static final int MAX_INIT_SPEED = 5;
 	
 	private static final int CENTER_LINE_WIDTH = 6;
@@ -45,7 +48,7 @@ public class SplitScreen {
 	private static final short SCORE_8 = 0b0111101111101111;
 	private static final short SCORE_9 = 0b0111100111101111;
 	
-	private static Handler handler = Controller.getSplitScreenHandler();
+	private static Handler handler = null;
 	private static Ball ball = null;
 	private static int p1Score = 0;
 	private static int p2Score = 0;
@@ -53,12 +56,13 @@ public class SplitScreen {
 	private static int pauseTimer = PAUSE_TIME_IN_SECONDS;
 	
 	@SuppressWarnings("all")
-	public static void init(){ // TODO: add a place for this to be called (when play button pressed)
+	public static void init(){
 		if(SCORE_WIDTH % 3 != 0 || NUM_SCORE_BLOCKS_X != 3 || NUM_SCORE_BLOCKS_Y != 5){
 			System.err.println("Invalid scoreboard constants.");
 			System.exit(-1);
 		}
 		
+		handler = new Handler();
 		p1Score = 0;
 		p2Score = 0;
 		
@@ -66,7 +70,7 @@ public class SplitScreen {
 	}
 	
 	private static void initObjects(){
-		ball = new Ball(BALL_INIT_X, BALL_INIT_Y, BALL_SIZE, BALL_SIZE, genInitBallVelocity(), genInitBallVelocity(), handler);
+		ball = new Ball(BALL_INIT_X, BALL_INIT_Y, BALL_SIZE, BALL_SIZE, INIT_X_VEL * (Math.random() < 0.5 ? -1 : 1), genInitBallVelocity(), handler);
 		new Paddle(P2_PADDLE_INIT_X, PADDLE_INIT_Y, PADDLE_WIDTH, PADDLE_HEIGHT, 0, 0, ID.P1_PADDLE, handler);
 		new Paddle(P1_PADDLE_INIT_X, PADDLE_INIT_Y, PADDLE_WIDTH, PADDLE_HEIGHT, 0, 0, ID.P2_PADDLE, handler);
 	}
@@ -103,25 +107,29 @@ public class SplitScreen {
 			handler.update();
 			
 			if(ball.isOffscreenLeft()){
-				p1Score++;
+				p2Score++;
 				resetAfterScore();
 			}else if(ball.isOffscreenRight()){
-				p2Score++;
+				p1Score++;
 				resetAfterScore();
 			}
 			
-			// TODO: Do a check if score hits its maximum
+			if(p1Score >= WINNING_SCORE){
+				JOptionPane.showMessageDialog(null, "Player 1 Wins!");
+				Controller.setState(State.MAIN_MENU);
+				SplitScreen.init();
+			}else if(p2Score >= WINNING_SCORE){
+				JOptionPane.showMessageDialog(null, "Player 2 Wins!");
+				Controller.setState(State.MAIN_MENU);
+				SplitScreen.init();
+			}
 		}
-		// TODO: update score using ball location, do if at least (or more than?) half of ball off-screen?
-		// Be sure to stay synced with time!
-		
-		
 	}
 	
 	public static void render(Graphics2D g){
 		drawCenterLine(g);
-		drawScore(p1Score, Game.WIDTH - SCORE_OFFSET_X - SCORE_WIDTH, SCORE_OFFSET_Y, SCORE_WIDTH / 3, g);
-		drawScore(p2Score, SCORE_OFFSET_X, SCORE_OFFSET_Y, SCORE_WIDTH / 3, g);
+		drawScore(p2Score, Game.WIDTH - SCORE_OFFSET_X - SCORE_WIDTH, SCORE_OFFSET_Y, SCORE_WIDTH / 3, g);
+		drawScore(p1Score, SCORE_OFFSET_X, SCORE_OFFSET_Y, SCORE_WIDTH / 3, g);
 		handler.render(g);
 	}
 	

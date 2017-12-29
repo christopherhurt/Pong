@@ -4,9 +4,6 @@ import java.awt.Graphics2D;
 
 public class MenuLabel {
 	
-	public static final int LABEL_X_OFFSET = 0; // TODO: update these
-	public static final int LABEL_Y_OFFSET = 0;
-	
 	private String label;
 	private int x;
 	private int y;
@@ -18,7 +15,7 @@ public class MenuLabel {
 	}
 	
 	public void render(Graphics2D g) {
-		g.drawString(label, x + LABEL_X_OFFSET, y + LABEL_Y_OFFSET);
+		g.drawString(label, x, y);
 	}
 	
 	public String getLabel(){

@@ -10,7 +10,7 @@ public abstract class Menu {
 	private List<MenuButton> buttons;
 	
 	public Menu(){
-		labels = new ArrayList<>(); // TODO: copyonwrite?
+		labels = new ArrayList<>();
 		buttons = new ArrayList<>();
 	}
 	

@@ -8,18 +8,18 @@ public class Ball extends GameObject implements Collider {
 		super(x, y, w, h, vX, vY, ID.BALL, handler);
 	}
 	
-	// TODO: Fix paddle collision, add more bounding boxes to paddles and change speed on contact
 	@Override
 	public void collision(){
 		GameObject p1Paddle = handler.getGameObject(ID.P1_PADDLE);
 		GameObject p2Paddle = handler.getGameObject(ID.P2_PADDLE);
+		final float velYScalar = 0.15f;
 		
-		if(handler.checkCollision(this, p1Paddle)){
-			x = Game.WIDTH - SplitScreen.PADDLE_WIDTH - SplitScreen.BALL_SIZE;
+		if(handler.checkCollision(this, p1Paddle) && vX > 0){
 			vX *= -1;
-		}else if(handler.checkCollision(this, p2Paddle)){
-			x = SplitScreen.PADDLE_WIDTH;
+			vY = (int)(((y + h / 2) - (p1Paddle.getY() + p1Paddle.getH() / 2)) * velYScalar);
+		}else if(handler.checkCollision(this, p2Paddle) && vX < 0){
 			vX *= -1;
+			vY = (int)(((y + h / 2) - (p2Paddle.getY() + p2Paddle.getH() / 2)) * velYScalar);
 		}
 		
 		if(y < 0){
@@ -49,5 +49,5 @@ public class Ball extends GameObject implements Collider {
 	public void render(Graphics2D g){
 		g.fillOval(x, y, w, h);
 	}
-		
+	
 }

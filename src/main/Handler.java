@@ -9,7 +9,7 @@ public class Handler {
 	private List<GameObject> list;
 	
 	public Handler(){
-		list = new ArrayList<>(); // TODO: make copyonwrite?
+		list = new ArrayList<>();
 	}
 	
 	public void add(GameObject obj){
