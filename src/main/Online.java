@@ -112,60 +112,52 @@ public class Online {
 			int yourID = Integer.parseInt(data.substring(27, 28));
 			ping = Integer.parseInt(data.substring(28));
 			
-			boolean updatePhysics = true;
-			
 			if(disconnect){
 				JOptionPane.showMessageDialog(null, "Disconnected from server.");
 				Controller.setState(State.MAIN_MENU);
-				updatePhysics = false;
 			}
 			
 			if(playerWin == 1){
 				JOptionPane.showMessageDialog(null, "Player 1 Wins!");
 				Controller.setState(State.MAIN_MENU);
-				updatePhysics = false;
 			}else if(playerWin == 2){
 				JOptionPane.showMessageDialog(null, "Player 2 Wins!");
 				Controller.setState(State.MAIN_MENU);
-				updatePhysics = false;
 			}
 			
 			if(p1Score > Online.p1Score || p2Score > Online.p2Score){
 				Online.p1Score = p1Score;
 				Online.p2Score = p2Score;
-				updatePhysics = false;
 				resetAfterScore();
 			}
 			
-			if(updatePhysics){
-				if(ballVelXChanged){
-					ball.setvX(ballVelX);
-				}
-				
-				if(ballVelYChanged){
-					ball.setvY(ballVelY);
-				}
-				
-				if(updateBallPos){
-					ball.setX(ballPosX);
-					ball.setY(ballPosY);
-				}
-				
-				if(p1VelChanged){
-					player1.setvY(p1Vel);
-				}
-				
-				if(p2VelChanged){
-					player2.setvY(p2Vel);
-				}
-				
-				if(updateP1Pos){
-					player1.setY(p1PosY);
-				}
-				
-				if(updateP2Pos){
-					player2.setY(p2PosY);
-				}
+			if(ballVelXChanged){
+				ball.setvX(ballVelX);
+			}
+			
+			if(ballVelYChanged){
+				ball.setvY(ballVelY);
+			}
+			
+			if(updateBallPos){
+				ball.setX(ballPosX);
+				ball.setY(ballPosY);
+			}
+			
+			if(p1VelChanged){
+				player1.setvY(p1Vel);
+			}
+			
+			if(p2VelChanged){
+				player2.setvY(p2Vel);
+			}
+			
+			if(updateP1Pos){
+				player1.setY(p1PosY);
+			}
+			
+			if(updateP2Pos){
+				player2.setY(p2PosY);
 			}
 			
 			String inputData;
