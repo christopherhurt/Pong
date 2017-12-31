@@ -1,7 +1,7 @@
 package server;
 
 public class Server {
-	
+    
 	private PhysicsObject ball;
 	private PhysicsObject player1;
 	private PhysicsObject player2;

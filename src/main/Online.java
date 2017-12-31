@@ -3,7 +3,12 @@ package main;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.SocketException;
+import java.net.URL;
+import java.net.UnknownHostException;
 import javax.swing.JOptionPane;
 
 public class Online {
@@ -48,6 +53,8 @@ public class Online {
 	private static final short SCORE_8 = 0b0111101111101111;
 	private static final short SCORE_9 = 0b0111100111101111;
 	
+	private static final short DEFAULT_PORT = 6969;
+	
 	private static Menu waitingMenu = null;
 	private static Handler handler = null;
 	private static boolean matchStarted = false;
@@ -59,18 +66,54 @@ public class Online {
 	private static OnlinePaddle player1 = null;
 	private static OnlinePaddle player2 = null;
 	
+	private static InetAddress ip = null;
+	private static DatagramSocket socket = null;
+	
 	public static void init(String ip){
 		waitingMenu = new OnlineWaitingMenu();
 		handler = new Handler();
 		matchStarted = false;
 		ping = 0;
 		
+		String[] ipAndPort = ip.split(":");
+		short port;
+		
+		if(ipAndPort.length == 1){
+		    try{
+	            Online.ip = InetAddress.getByName(new URL(ipAndPort[0]).getHost());
+	        }catch(UnknownHostException e){
+	            e.printStackTrace();
+	        }catch(MalformedURLException e){
+	            e.printStackTrace();
+	        }
+		    
+		    port = DEFAULT_PORT;
+		}else if(ipAndPort.length == 2){
+		    try{
+	            Online.ip = InetAddress.getByName(new URL(ipAndPort[0]).getHost());
+	        }catch(UnknownHostException e){
+	            e.printStackTrace();
+	        }catch(MalformedURLException e){
+                e.printStackTrace();
+            }
+		    
+		    port = Short.parseShort(ipAndPort[1]);
+		}else{
+		    throw new IllegalArgumentException("Invalid ip address format");
+		}
+		
+		try{
+            socket = new DatagramSocket(port);
+        }catch(SocketException e){
+            e.printStackTrace();
+        }
+		
+		// TODO: connection confirmation here?
+		
 		p1Score = 0;
 		p2Score = 0;
 		
 		resetAfterScore();
-		
-		// TODO: open socket (default port if none given)
 	}
 	
 	private static void resetAfterScore(){
@@ -178,7 +221,7 @@ public class Online {
 			sendPacket(sendData);
 		}else{
 			waitingMenu.update();
-			// TODO: try to connect to server, wait for game start confirmation
+			// TODO: try to connect to server, wait for game start confirmation, connection confirmation to server?
 		}
 	}
 	
