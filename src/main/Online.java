@@ -3,6 +3,8 @@ package main;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.io.IOException;
+import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
@@ -67,6 +69,7 @@ public class Online {
 	private static OnlinePaddle player2 = null;
 	
 	private static InetAddress ip = null;
+	private static short port = 0;
 	private static DatagramSocket socket = null;
 	
 	public static void init(String ip){
@@ -76,7 +79,6 @@ public class Online {
 		ping = 0;
 		
 		String[] ipAndPort = ip.split(":");
-		short port;
 		
 		if(ipAndPort.length == 1){
 		    try{
@@ -108,7 +110,7 @@ public class Online {
             e.printStackTrace();
         }
 		
-		// TODO: connection confirmation here?
+		sendPacket("0");
 		
 		p1Score = 0;
 		p2Score = 0;
@@ -127,7 +129,7 @@ public class Online {
 	public static void update(){
 		if(matchStarted){
 			String data = retrievePacket();
-			
+			// TODO: Check for disconnection packet
 			if(data.length() != 27){
 				throw new IllegalStateException("Received data packet is incorrect size");
 			}
@@ -221,18 +223,37 @@ public class Online {
 			sendPacket(sendData);
 		}else{
 			waitingMenu.update();
-			// TODO: try to connect to server, wait for game start confirmation, connection confirmation to server?
+			String connect = retrievePacket();
+			// TODO: Send update pings? (just 0)
+			if(connect.equals("1")){
+			    matchStarted = true;
+			}
 		}
 	}
 	
 	private static String retrievePacket(){
-		return null; // TODO
-		// Time out connection with server if waiting too long? (DO IT SOMEWHERE)
+		byte[] data = new byte[36];
+		DatagramPacket packet = new DatagramPacket(data, data.length);
+		
+		try{
+            socket.receive(packet);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+		
+		byte[] retrievedData = packet.getData();
+		return new String(retrievedData, 0, retrievedData.length);
 	}
 	
 	private static void sendPacket(String data){
-		// TODO
-		// Time out connection with server if waiting too long?
+		byte[] byteData = data.getBytes();
+		DatagramPacket packet = new DatagramPacket(byteData, byteData.length, ip, port);
+		
+		try{
+            socket.send(packet);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
 	}
 	
 	private static boolean parseBool(String bit){
